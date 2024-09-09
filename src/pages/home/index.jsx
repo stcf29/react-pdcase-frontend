@@ -11,9 +11,13 @@ function Home() {
   const inputCarteira = useRef();
   const inputPlano  = useRef();
   const inputEspecialidade = useRef();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]); // Estado para armazenar users(pacientes)
   const [selectedUser, setSelectedUser] = useState(null);
   const [busca, setBusca] = useState("");
+  const [especialidades, setEspecialidades] = useState([]); // Estado para armazenar especialidades
+  const [planos, setPlanos] = useState([]); // Estado para armazenar planos
+  const [selectedEspecialidade, setSelectedEspecialidade] = useState('');
+  const [selectedPlano, setSelectedPlano] = useState('');
   
   async function getUsers(){
     const usersAPi = await api.get('/pacientes')
@@ -21,6 +25,18 @@ function Home() {
   }
 
   useEffect(() =>{
+    async function fetchData() {
+      try {
+        const especialidadesResponse = await api.get('/especialidades');
+        setEspecialidades(especialidadesResponse.data);
+
+        const planosResponse = await api.get('/planos');
+        setPlanos(planosResponse.data);
+      } catch (error) {
+        toast.error('Erro ao carregar especialidades e planos.');
+      }
+    }
+    fetchData(); 
     getUsers()
   }, [])
 
@@ -29,8 +45,8 @@ function Home() {
       const response = await api.post('/pacientes', {
         nome: inputNome.current.value,
         carteira: inputCarteira.current.value,
-        plano: inputPlano.current.value,
-        especialidade: inputEspecialidade.current.value
+        plano: selectedPlano,
+        especialidade: selectedEspecialidade
       });
       toast.success(response.data.message);
       getUsers();
@@ -47,8 +63,8 @@ function Home() {
       const response = await api.put(`/pacientes/${selectedUser.id}`, {
         nome: inputNome.current.value,
         carteira: inputCarteira.current.value,
-        plano: inputPlano.current.value,
-        especialidade: inputEspecialidade.current.value
+        plano: selectedPlano,
+        especialidade: selectedEspecialidade
       });
       toast.success('Paciente atualizado com sucesso!');
       setSelectedUser(null); // Reseta o formulário após editar
@@ -83,10 +99,24 @@ function Home() {
         <h1>{selectedUser ? 'Editar Paciente' : 'Cadastro de Pacientes'}</h1>
         <input placeholder='Nome' name='nome' type="text" ref={inputNome}/>
         <input placeholder='Carteira' name='carteira' type="number" ref={inputCarteira}/>
-        <input placeholder='Plano' name='plano' type="text" ref={inputPlano}/>
-        <input placeholder='Especialidade' name='especialidade' type="text" ref={inputEspecialidade} />
+        
+        
+         <select placeholder='Plano' value={selectedPlano} onChange={(e) => setSelectedPlano(e.target.value)}>
+          <option value="">Selecione um plano</option>
+          {planos.map((plano) => (
+            <option key={plano.id} value={plano.nome}>{plano.nome}</option>
+          ))}
+        </select>
 
-        {/* Botao pra "Salvar Alterações" ou "Cadastrar"*/}
+     
+        <select placeholder='Especialidade'value={selectedEspecialidade} onChange={(e) => setSelectedEspecialidade(e.target.value)}>
+          <option value="">Selecione uma especialidade</option>
+          {especialidades.map((especialidade) => (
+            <option key={especialidade.id} value={especialidade.nome}>{especialidade.nome}</option>
+          ))}
+        </select>
+
+        
         {selectedUser ? (
           <button type='button' onClick={updateUser}>Salvar Alterações</button>
         ) : (
