@@ -26,7 +26,7 @@
   background-color: rgb(33, 34, 34);
   max-width: 50%;
   width: 400px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 
 
   & button{
@@ -103,4 +103,27 @@
   width: "full";
   max-width: 400px;
   padding: auto;
+}
+
+.planos{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color:#48456C;
+  max-width: 100%;
+  width: 400px;
+  margin-bottom: 5px;
+}
+
+.especialidades{
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #48456C;
+  max-width: 100%;
+  width: 400px;
+  margin-bottom: 10px;
 }

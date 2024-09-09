@@ -101,7 +101,7 @@ function Home() {
         <input placeholder='Carteira' name='carteira' type="number" ref={inputCarteira}/>
         
         
-         <select placeholder='Plano' value={selectedPlano} onChange={(e) => setSelectedPlano(e.target.value)}>
+         <select placeholder='Plano' value={selectedPlano} onChange={(e) => setSelectedPlano(e.target.value)} className='planos'>
           <option value="">Selecione um plano</option>
           {planos.map((plano) => (
             <option key={plano.id} value={plano.nome}>{plano.nome}</option>
@@ -109,7 +109,7 @@ function Home() {
         </select>
 
      
-        <select placeholder='Especialidade'value={selectedEspecialidade} onChange={(e) => setSelectedEspecialidade(e.target.value)}>
+        <select placeholder='Especialidade'value={selectedEspecialidade} onChange={(e) => setSelectedEspecialidade(e.target.value)} className='especialidades'>
           <option value="">Selecione uma especialidade</option>
           {especialidades.map((especialidade) => (
             <option key={especialidade.id} value={especialidade.nome}>{especialidade.nome}</option>
